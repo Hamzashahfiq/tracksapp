@@ -4,28 +4,34 @@ import { Alert } from 'react-native';
 
 export const FatchTracks = createAsyncThunk(
     'tracks/FatchTracks',
-    async () => {
+    async ({ trueLoading, falseLoading }) => {
         try {
-         const TrackData = await database()
+            trueLoading()
+            const TrackData = await database()
                 .ref('/tracks/')
                 .once('value')
 
-            const TracksArr = []    
-                TrackData.forEach((item) => {
-                    TracksArr.push(item.val())
-                })
-            console.log(TracksArr)
+            var TracksArr = []
+            TrackData.forEach((item) => {
+                TracksArr.push(item.val())
+            })
+            // console.log(TracksArr)
         } catch (error) {
             Alert.alert(message.error)
         }
+        finally {
+            falseLoading()
+        }
 
-        return null
+        return TracksArr
     }
 )
 
 
 
-const initialState = []
+const initialState = {
+    tracksData: []
+}
 
 
 export const TrackSlice = createSlice({
@@ -35,7 +41,7 @@ export const TrackSlice = createSlice({
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(FatchTracks.fulfilled, (state, action) => {
-
+           state.tracksData = action.payload
         })
     },
 })

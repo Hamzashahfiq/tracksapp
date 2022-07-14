@@ -1,27 +1,58 @@
-import { Text, View } from 'react-native'
+import { ScrollView, Text, View, FlatList } from 'react-native'
 import React, { Component } from 'react'
 import { FatchTracks } from '../../store/TrackSlice'
 import { connect } from 'react-redux'
+import SplashScreen from '../splashScreen/SplashScreen';
+
 
 
 class Home extends Component {
-    constructor(props){
-        super(props)
-    }
-    UNSAFE_componentWillMount(){
-        this.props.getTracks()
-    }
+  constructor(props) {
+    super(props);
+    this.state = { loading: false };
+  }
+  tLoading = () => {
+    this.setState({ loading: true })
+  }
+  fLoading = () => {
+    this.setState({ loading: false })
+  }
+  UNSAFE_componentWillMount() {
+    let trueLoading = this.tLoading
+    let falseLoading = this.fLoading
+    this.props.getTracks({ trueLoading, falseLoading })
+  }
+
   render() {
+    console.log(this.props.tracksData)
+    const tData = this.props.tracksData
     return (
-      <View>
-        <Text>Home</Text>
-      </View>
+
+
+      <>
+        {this.state.loading ? <SplashScreen /> :
+          <FlatList
+            data={tData}
+            renderItem={({ item }) => (
+              <View>
+                <Text>{item.tCategory}</Text>
+              </View>
+            )}
+            keyExtractor={item => item.id}
+          />
+
+        }
+      </>
     )
   }
 }
 
+const mapStateToProps = (store, ownProps) => ({
+  tracksData: store.Tracks.tracksData,
+})
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    getTracks: () => dispatch(FatchTracks()),
+  getTracks: ({ trueLoading, falseLoading }) => dispatch(FatchTracks({ trueLoading, falseLoading })),
 })
 
-export default connect(null, mapDispatchToProps)(Home);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
