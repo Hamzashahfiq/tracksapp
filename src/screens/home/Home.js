@@ -1,8 +1,10 @@
-import { ScrollView, Text, View, FlatList } from 'react-native'
+import { ScrollView, SectionList, Text, View, FlatList, ImageBackground } from 'react-native'
 import React, { Component } from 'react'
 import { FatchTracks } from '../../store/TrackSlice'
 import { connect } from 'react-redux'
 import SplashScreen from '../splashScreen/SplashScreen';
+import { Styles } from './HomeStyle';
+
 
 
 
@@ -26,20 +28,28 @@ class Home extends Component {
   render() {
     console.log(this.props.tracksData)
     const tData = this.props.tracksData
+    console.log(this.props.tracksData[0].data)
     return (
 
 
       <>
         {this.state.loading ? <SplashScreen /> :
-          <FlatList
-            data={tData}
-            renderItem={({ item }) => (
-              <View>
-                <Text>{item.tCategory}</Text>
-              </View>
-            )}
-            keyExtractor={item => item.id}
-          />
+          <View style={Styles.mainView}>
+            <ImageBackground style={Styles.bImage} source={require('../../assets/tbgimg.webp')} resizeMode="cover">
+              <SectionList
+                sections={tData}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                  <View>
+                    <Text>{item.id}</Text>
+                  </View>
+                )}
+                renderSectionHeader={({ section: { title } }) => (
+                  <Text >{title}</Text>
+                )}
+              />
+            </ImageBackground>
+          </View>
 
         }
       </>
