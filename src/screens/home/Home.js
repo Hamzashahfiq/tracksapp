@@ -4,6 +4,7 @@ import { FatchTracks } from '../../store/TrackSlice'
 import { connect } from 'react-redux'
 import SplashScreen from '../splashScreen/SplashScreen';
 import { Styles } from './HomeStyle';
+import TrackPlayer from 'react-native-track-player';
 
 
 
@@ -11,7 +12,9 @@ import { Styles } from './HomeStyle';
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false };
+    this.state = {
+      loading: false,
+    };
   }
   tLoading = () => {
     this.setState({ loading: true })
@@ -19,10 +22,31 @@ class Home extends Component {
   fLoading = () => {
     this.setState({ loading: false })
   }
+  trackHandler = (item) => {
+    let track = {
+      url: item.trackUrl,
+      artist: item.releaseBy,
+    }
+    this.trackAdd(track)
+    this.props.navigation.navigate('Track', tracksData = item)
+  }
   UNSAFE_componentWillMount() {
     let trueLoading = this.tLoading
     let falseLoading = this.fLoading
     this.props.getTracks({ trueLoading, falseLoading })
+  }
+  componentDidMount() {
+    this.trackPlayerSetup()
+  }
+
+  trackPlayerSetup = async () => {
+    await TrackPlayer.setupPlayer()
+   
+  }
+  
+  trackAdd = async (track) => {
+    TrackPlayer.reset();
+    await TrackPlayer.add([track]);
   }
 
   render() {
@@ -59,11 +83,11 @@ class Home extends Component {
                       horizontal
                       data={section.data}
                       renderItem={({ item }) => (
-                        <TouchableOpacity onPress={null}>
+                        <TouchableOpacity onPress={() => this.trackHandler(item)}>
                           <View style={Styles.cardView}>
-                            <ImageBackground style={Styles.cardImg} source={{uri:item.imageUrl}} resizeMode="cover" >
-                                <View style={Styles.imgView1}><Text style={Styles.imgText1} >{item.tName}</Text></View> 
-                                <View style={Styles.imgView2}><Text style={Styles.imgText2}>by: {item.releaseBy}</Text></View> 
+                            <ImageBackground style={Styles.cardImg} source={{ uri: item.imageUrl }} resizeMode="cover" >
+                              <View style={Styles.imgView1}><Text style={Styles.imgText1} >{item.tName}</Text></View>
+                              <View style={Styles.imgView2}><Text style={Styles.imgText2}>by: {item.releaseBy}</Text></View>
                             </ImageBackground>
                           </View>
                         </TouchableOpacity>

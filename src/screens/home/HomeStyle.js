@@ -25,7 +25,6 @@ export const Styles = StyleSheet.create({
         fontWeight: "bold"
     },
     cardView: {
-        borderWidth: 1,
         height: 170,
         width: 170,
         margin: 8
@@ -33,6 +32,11 @@ export const Styles = StyleSheet.create({
     cardImg: {
         flex: 1,
         padding: 3,
+        overflow: 'hidden',
+        borderRadius:16,
+        borderWidth:3,
+        borderColor:'white'
+
     },
     imgText1: {
         color: 'black',
