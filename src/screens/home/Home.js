@@ -23,11 +23,11 @@ class Home extends Component {
     this.setState({ loading: false })
   }
   trackHandler = (item) => {
-    let track = {
-      url: item.trackUrl,
-      artist: item.releaseBy,
-    }
-    this.trackAdd(track)
+    // let track = {
+    //   url: item.trackUrl,
+    //   artist: item.releaseBy,
+    // }
+    // this.trackAdd(track)
     this.props.navigation.navigate('Track', tracksData = item)
   }
   UNSAFE_componentWillMount() {
@@ -44,10 +44,7 @@ class Home extends Component {
    
   }
   
-  trackAdd = async (track) => {
-    TrackPlayer.reset();
-    await TrackPlayer.add([track]);
-  }
+
 
   render() {
     const tData = this.props.tracksData

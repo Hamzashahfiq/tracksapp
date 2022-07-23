@@ -30,12 +30,23 @@ export const Styles = StyleSheet.create({
         width: '100%',
         padding: 5,
         borderRadius: 4,
-        marginTop:50,
+        marginTop:5,
     },
     tButtonText: {
         color: 'white',
         fontWeight:"bold",
         textAlign:"center"
+    },
+    viewSlider:{
+        marginTop:20,
+    },
+    viewText:{
+    justifyContent: 'space-between',
+    flexDirection:'row',
+    width: '100%',
+    paddingHorizontal:10,
+    paddingBottom:20,
+    marginTop: -20
     }
 
 })
